@@ -13,10 +13,12 @@ class HallController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   
+        /*
         return Inertia::render('Settings', [
             'halls' => Hall::all(),
         ]);
+        */
     }
 
     /**
@@ -32,6 +34,7 @@ class HallController extends Controller
      */
     public function store(Request $request)
     {
+      
         Validator::make($request->all(), [
             'name' => 'required|unique:halls'
         ])->validate();
@@ -43,7 +46,8 @@ class HallController extends Controller
         $hall->chairs_in_row = 10;
         $hall->save();
 
-        return redirect()->route('admin.index')->with('halls', Hall::all());
+        //return redirect()->route('admin.index')->with('halls', Hall::all());
+        return redirect()->route('admin.index');
     }
 
     /**
@@ -76,6 +80,7 @@ class HallController extends Controller
     public function destroy(int $id)
     {
         $res = Hall::destroy($id);
-        return redirect()->route('admin.index')->with('halls', Hall::all());
+        //return redirect()->route('admin.index')->with('halls', Hall::all());
+        return redirect()->route('admin.index');
     }
 }

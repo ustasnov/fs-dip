@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HallController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,7 +21,7 @@ Route::get('/admin', function () {
     return Inertia::render('Settings', [ HallController::class, 'index' ]);
 });
 */
-Route::get('/admin', [HallController::class, 'index'])->name('admin.index');
+Route::get('/admin', [SettingController::class, 'index'])->name('admin.index');
 Route::post('/admin', [HallController::class, 'store'])->name('admin.store');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
 

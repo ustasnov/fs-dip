@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Hall extends Model
 {
@@ -11,4 +12,8 @@ class Hall extends Model
       'number_of_rows',
       'chairs_in_row',
     ];
+
+    public function places(): HasMany {
+      return $this->hasMany(Place::class);
+  }
 }

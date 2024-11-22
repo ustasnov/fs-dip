@@ -882,3 +882,18 @@ textarea.conf-step__input {
     font-size: 1.6rem;
     color: red;
 }
+
+.conf-step__button-with-error {
+  display: flex;
+  align-items: center;
+}
+
+.conf-step__button-error {
+  margin: 17px 0 0 10px;
+  padding: 5px 10px;
+  background-color: brown;  
+  color: #caff85;
+  font-size: 1.6rem;
+  font-weight: 400;
+  border-radius: 5px;
+}
