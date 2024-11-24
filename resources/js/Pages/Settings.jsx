@@ -7,6 +7,11 @@ import posterImgUrl from '../../images/poster.png';
 export default function Settings(props) {
     const { halls, settings } = props;
     const { errors } = usePage().props;
+    const s_opened_str = localStorage.getItem('s_opened');
+    let s_opened = ["1", "1", "1", "1", "1"];
+    if (s_opened_str) {
+        s_opened = JSON.parse(s_opened_str);
+    }
 
     function getErrorMessage(error) {
         if (error === 'validation.unique') {
@@ -30,7 +35,7 @@ export default function Settings(props) {
 
             <main className="conf-steps">
                 <section className="conf-step">
-                    <ConfStepHeader title="Управление залами" open={settings.section1_opened}></ConfStepHeader>
+                    <ConfStepHeader h_id="0" title="Управление залами" open={s_opened[0]}></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">Доступные залы:</p>
                         <HallsList data={halls}></HallsList>
@@ -46,7 +51,7 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader title="Конфигурация залов" open={settings.section2_opened}></ConfStepHeader>
+                    <ConfStepHeader h_id="1" title="Конфигурация залов" open={s_opened[1]}></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
@@ -243,7 +248,7 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader title="Конфигурация цен" open={settings.section3_opened}></ConfStepHeader>
+                    <ConfStepHeader h_id="2" title="Конфигурация цен" open={s_opened[2]}></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
@@ -319,7 +324,7 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader title="Сетка сеансов" open={settings.section4_opened}></ConfStepHeader>
+                    <ConfStepHeader h_id="3" title="Сетка сеансов" open={s_opened[3]}></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             <button className="conf-step__button conf-step__button-accent">
@@ -512,7 +517,7 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader title="Открыть продажи" open={settings.section5_opened}></ConfStepHeader>
+                    <ConfStepHeader h_id="4" title="Открыть продажи" open={s_opened[4]}></ConfStepHeader>
                     <div className="conf-step__wrapper text-center">
                         <p className="conf-step__paragraph">
                             Всё готово, теперь можно:
