@@ -11,6 +11,8 @@ class Hall extends Model
       'name',
       'number_of_rows',
       'chairs_in_row',
+      'price',
+      'vip_price'
     ];
 
     public function places(): HasMany {

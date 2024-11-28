@@ -10,7 +10,7 @@ class Place extends Model
     'hall_id',
     'row',
     'chair',
-    'vip',
+    'status',
   ];
 
 }

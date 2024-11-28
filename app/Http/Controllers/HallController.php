@@ -44,6 +44,8 @@ class HallController extends Controller
         $hall->name = $request->name;
         $hall->number_of_rows = 5;
         $hall->chairs_in_row = 10;
+        $hall->price = 0;
+        $hall->vip_price = 0;
         $hall->save();
 
         //return redirect()->route('admin.index')->with('halls', Hall::all());

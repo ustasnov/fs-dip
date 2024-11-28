@@ -1,17 +1,33 @@
 import ConfStepHeader from '@/Components/Settings/ConfStepHeader';
 import CreateHallButton from '@/Components/Settings/CreateHallButton';
+import HallConfig from '@/Components/Settings/HallConfig';
 import HallsList from '@/Components/Settings/HallsList';
+import HallsSelector from '@/Components/Settings/HallsSelector';
 import { usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
 
 export default function Settings(props) {
-    const { halls, settings } = props;
+    const { halls, places } = props;
     const { errors } = usePage().props;
     const s_opened_str = localStorage.getItem('s_opened');
-    let s_opened = ["1", "1", "1", "1", "1"];
+    let s_opened = ['1', '1', '1', '1', '1'];
     if (s_opened_str) {
         s_opened = JSON.parse(s_opened_str);
     }
+    const s_checked_str = localStorage.getItem('s_checked');
+    let s_checked = ['1', '1', '1'];
+    if (s_checked_str) {
+        s_checked = JSON.parse(s_checked_str);
+    } else {
+        localStorage.setItem('s_checked', JSON.stringify(s_checked));
+    }
+
+    const [s0_checked, setChecked0] = new useState(s_checked[0]);
+    const [s1_checked, setChecked1] = new useState(s_checked[1]);
+    //const [s2_checked, setChecked2] = new useState(s_checked[2]);
+
+    //console.log(halls);
 
     function getErrorMessage(error) {
         if (error === 'validation.unique') {
@@ -21,6 +37,34 @@ export default function Settings(props) {
         }
         return '';
     }
+
+    function onCheckHandler0(ev) {
+        if (ev.target.checked) {
+            s_checked[0] = ev.target.id;
+            localStorage.setItem('s_checked', JSON.stringify(s_checked));
+            setChecked0(s_checked[0]);
+        }
+        //ev.preventDefault();
+    }
+
+    function onCheckHandler1(ev) {
+        if (ev.target.checked) {
+            s_checked[1] = ev.target.id;
+            localStorage.setItem('s_checked', JSON.stringify(s_checked));
+            setChecked1(s_checked[1]);
+        }
+        //ev.preventDefault();
+    }
+
+    /*
+    function onCheckHandler2(ev) {
+        if (ev.target.checked) {
+            s_checked[2] = ev.target.id;
+            localStorage.setItem('s_checked', JSON.stringify(s_checked));
+            setChecked2(s_checked[2]);
+        }
+    }
+    */
 
     return (
         <>
@@ -35,7 +79,11 @@ export default function Settings(props) {
 
             <main className="conf-steps">
                 <section className="conf-step">
-                    <ConfStepHeader h_id="0" title="Управление залами" open={s_opened[0]}></ConfStepHeader>
+                    <ConfStepHeader
+                        h_id="0"
+                        title="Управление залами"
+                        open={s_opened[0]}
+                    ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">Доступные залы:</p>
                         <HallsList data={halls}></HallsList>
@@ -51,233 +99,45 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader h_id="1" title="Конфигурация залов" open={s_opened[1]}></ConfStepHeader>
+                    <ConfStepHeader
+                        h_id="1"
+                        title="Конфигурация залов"
+                        open={s_opened[1]}
+                    ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
                         </p>
-                        <ul className="conf-step__selectors-box">
-                            <li>
-                                <input
-                                    type="radio"
-                                    className="conf-step__radio"
-                                    name="chairs-hall"
-                                    value="Зал 1"
-                                    checked
-                                ></input>
-                                <span className="conf-step__selector">
-                                    Зал 1
-                                </span>
-                            </li>
-                            <li>
-                                <input
-                                    type="radio"
-                                    className="conf-step__radio"
-                                    name="chairs-hall"
-                                    value="Зал 2"
-                                ></input>
-                                <span className="conf-step__selector">
-                                    Зал 2
-                                </span>
-                            </li>
-                        </ul>
-                        <p className="conf-step__paragraph">
-                            Укажите количество рядов и максимальное количество
-                            кресел в ряду:
-                        </p>
-                        <div className="conf-step__legend">
-                            <label className="conf-step__label">
-                                Рядов, шт
-                                <input
-                                    type="text"
-                                    className="conf-step__input"
-                                    placeholder="10"
-                                ></input>
-                            </label>
-                            <span className="multiplier">x</span>
-                            <label className="conf-step__label">
-                                Мест, шт
-                                <input
-                                    type="text"
-                                    className="conf-step__input"
-                                    placeholder="8"
-                                ></input>
-                            </label>
-                        </div>
-                        <p className="conf-step__paragraph">
-                            Теперь вы можете указать типы кресел на схеме зала:
-                        </p>
-                        <div className="conf-step__legend">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>{' '}
-                            — обычные кресла
-                            <span className="conf-step__chair conf-step__chair_vip"></span>{' '}
-                            — VIP кресла
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>{' '}
-                            — заблокированные (нет кресла)
-                            <p className="conf-step__hint">
-                                Чтобы изменить вид кресла, нажмите по нему левой
-                                кнопкой мыши
-                            </p>
-                        </div>
-
-                        <div className="conf-step__hall">
-                            <div className="conf-step__hall-wrapper">
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_vip"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_disabled"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                </div>
-
-                                <div className="conf-step__row">
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                    <span className="conf-step__chair conf-step__chair_standart"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <fieldset className="conf-step__buttons text-center">
-                            <button className="conf-step__button conf-step__button-regular">
-                                Отмена
-                            </button>
-                            <input
-                                type="submit"
-                                value="Сохранить"
-                                className="conf-step__button conf-step__button-accent"
-                            ></input>
-                        </fieldset>
+                        <HallsSelector
+                            sectionIndex="0"
+                            activeId={s0_checked}
+                            data={halls}
+                            onCheckHandler={onCheckHandler0}
+                        ></HallsSelector>
+                        <HallConfig
+                            hallId={s0_checked}
+                            halls={halls}
+                            places={places}
+                        ></HallConfig>
                     </div>
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader h_id="2" title="Конфигурация цен" open={s_opened[2]}></ConfStepHeader>
+                    <ConfStepHeader
+                        h_id="2"
+                        title="Конфигурация цен"
+                        open={s_opened[2]}
+                    ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
                         </p>
-                        <ul className="conf-step__selectors-box">
-                            <li>
-                                <input
-                                    type="radio"
-                                    className="conf-step__radio"
-                                    name="prices-hall"
-                                    value="Зал 1"
-                                ></input>
-                                <span className="conf-step__selector">
-                                    Зал 1
-                                </span>
-                            </li>
-                            <li>
-                                <input
-                                    type="radio"
-                                    className="conf-step__radio"
-                                    name="prices-hall"
-                                    value="Зал 2"
-                                    checked
-                                ></input>
-                                <span className="conf-step__selector">
-                                    Зал 2
-                                </span>
-                            </li>
-                        </ul>
+                        <HallsSelector
+                            sectionIndex="1"
+                            activeId={s1_checked}
+                            data={halls}
+                            onCheckHandler={onCheckHandler1}
+                        ></HallsSelector>
 
                         <p className="conf-step__paragraph">
                             Установите цены для типов кресел:
@@ -324,7 +184,11 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader h_id="3" title="Сетка сеансов" open={s_opened[3]}></ConfStepHeader>
+                    <ConfStepHeader
+                        h_id="3"
+                        title="Сетка сеансов"
+                        open={s_opened[3]}
+                    ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
                             <button className="conf-step__button conf-step__button-accent">
@@ -517,7 +381,11 @@ export default function Settings(props) {
                 </section>
 
                 <section className="conf-step">
-                    <ConfStepHeader h_id="4" title="Открыть продажи" open={s_opened[4]}></ConfStepHeader>
+                    <ConfStepHeader
+                        h_id="4"
+                        title="Открыть продажи"
+                        open={s_opened[4]}
+                    ></ConfStepHeader>
                     <div className="conf-step__wrapper text-center">
                         <p className="conf-step__paragraph">
                             Всё готово, теперь можно:
