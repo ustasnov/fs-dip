@@ -1,29 +1,87 @@
-export default function HallConfig(props) {
-    const { hallId, halls, places } = props;
+import { useState } from 'react';
+import HallPlaces from './HallPlaces';
 
-    //console.log(halls);
-    //console.log(hallId);
-    const hallData = halls.find(function (hall) {
+export default function HallConfig({ hallId, halls, places }) {
+    const [prev_hallId, setHallId] = new useState(hallId);
+    let hallData = halls.find(function (hall) {
         return hall.id === parseInt(hallId);
     });
-    //console.log(hallData);
+
+    const [values, setValues] = new useState({
+        number_of_rows: hallData.number_of_rows,
+        chairs_in_row: hallData.chairs_in_row,
+    });
+
+    let places_arr = [];
+
     const hallPlaces = Array.of(places).filter(
         (place) => place.hall_id === parseInt(hallId),
     );
-    //console.log(hallPlaces);
-    const places_arr = [];
-    if (hallData.number_of_rows > 0 && hallData.chairs_in_row > 0) {
-        for (let r = 0; r < hallData.number_of_rows; r++) {
-            places_arr.push([]);
-            for (let c = 0; c < hallData.chairs_in_row; c++) {
-                places_arr[r].push({
-                    hall_id: hallData.id,
-                    row: r + 1,
-                    chair: c + 1,
-                    status: 'disabled',
-                });
+
+    function getPlacesArray() {
+        const pl_arr = [];
+        if (values.number_of_rows > 0 && values.chairs_in_row > 0) {
+            for (let r = 0; r < values.number_of_rows; r++) {
+                pl_arr.push([]);
+                for (let c = 0; c < values.chairs_in_row; c++) {
+                    const ri = r + 1;
+                    const ci = c + 1;
+                    const place = hallPlaces.find(function (val) {
+                        return val.row === ri && val.chair === ci;
+                    });
+                    pl_arr[r].push({
+                        hall_id: hallData.id,
+                        row: ri,
+                        chair: ci,
+                        status: place ? place.status : 'disabled',
+                    });
+                }
             }
         }
+        return pl_arr;
+    }
+    places_arr = getPlacesArray();
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value;
+        setValues((values) => ({
+            ...values,
+            [key]: value,
+        }));
+        places_arr = getPlacesArray();
+    }
+
+    if (hallId !== prev_hallId) {
+        setHallId(hallId);
+        setValues({
+            number_of_rows: hallData.number_of_rows,
+            chairs_in_row: hallData.chairs_in_row,
+        });
+        places_arr = getPlacesArray();
+    }
+
+    function placeClickHandler(ev) {
+        if (ev.target.classList.contains('conf-step__chair_disabled')) {
+            ev.target.classList.remove('conf-step__chair_disabled');
+            ev.target.classList.add('conf-step__chair_standart');
+            places_arr[parseInt(ev.target.dataset.row)][
+                parseInt(ev.target.dataset.col)
+            ].status = 'standart';
+        } else if (ev.target.classList.contains('conf-step__chair_standart')) {
+            ev.target.classList.remove('conf-step__chair_standart');
+            ev.target.classList.add('conf-step__chair_vip');
+            places_arr[parseInt(ev.target.dataset.row)][
+                parseInt(ev.target.dataset.col)
+            ].status = 'vip';
+        } else {
+            ev.target.classList.remove('conf-step__chair_vip');
+            ev.target.classList.add('conf-step__chair_disabled');
+            places_arr[parseInt(ev.target.dataset.row)][
+                parseInt(ev.target.dataset.col)
+            ].status = 'disabled';
+        }
+        ev.preventDefault();
     }
 
     return (
@@ -36,20 +94,26 @@ export default function HallConfig(props) {
                 <label className="conf-step__label">
                     Рядов, шт
                     <input
+                        id="number_of_rows"
+                        name="number_of_rows"
                         type="text"
                         className="conf-step__input"
-                        value={hallData.number_of_rows}
-                        placeholder="10"
+                        value={values.number_of_rows}
+                        placeholder="рядов"
+                        onChange={handleChange}
                     ></input>
                 </label>
                 <span className="multiplier">x</span>
                 <label className="conf-step__label">
                     Мест, шт
                     <input
+                        id="chairs_in_row"
+                        name="chairs_in_row"
                         type="text"
                         className="conf-step__input"
-                        value={hallData.chairs_in_row}
-                        placeholder="8"
+                        value={values.chairs_in_row}
+                        placeholder="мест"
+                        onChange={handleChange}
                     ></input>
                 </label>
             </div>
@@ -68,119 +132,12 @@ export default function HallConfig(props) {
                     мыши
                 </p>
             </div>
-            {hallData.number_of_rows > 0 && hallData.chairs_in_row > 0 && (
+            {values.number_of_rows > 0 && values.chairs_in_row > 0 && (
                 <div className="conf-step__hall">
-                    <div className="conf-step__hall-wrapper">
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_vip"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_disabled"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                        </div>
-
-                        <div className="conf-step__row">
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                            <span className="conf-step__chair conf-step__chair_standart"></span>
-                        </div>
-                    </div>
+                    <HallPlaces
+                        places={places_arr}
+                        handler={placeClickHandler}
+                    ></HallPlaces>
                 </div>
             )}
 
