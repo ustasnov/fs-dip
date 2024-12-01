@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import HallPlaces from './HallPlaces';
 
@@ -40,6 +41,36 @@ export default function HallConfig({ hallId, halls, places }) {
         }
         return pl_arr;
     }
+
+    /*
+    function clearPlacesStatus() {
+        /*
+        const containerEl = document.querySelector('.conf-step__hall');
+        if (containerEl) {
+            const placeElements =
+                containerEl.querySelector('.conf-step__chair');
+            if (placeElements) {
+                Array.of(placeElements).forEach((el) => {
+                    if (el.classList.contains('conf-step__chair_standart')) {
+                        el.classList.remove('conf-step__chair_standart');
+                        el.classList.add('conf-step__chair_disabled');
+                    } else if (el.classList.contains('conf-step__chair_vip')) {
+                        el.classList.remove('conf-step__chair_vip');
+                        el.classList.add('conf-step__chair_disabled');
+                    }
+                });
+            }
+        }
+        const containerEl = document.querySelector('.conf-step__hall');
+        if (containerEl) {
+            //containerEl.innerHTML = '';
+            while (containerEl.firstChild) {
+                containerEl.removeChild(containerEl.firstChild);
+            }
+        }
+    }
+    */
+
     places_arr = getPlacesArray();
 
     function handleChange(e) {
@@ -54,6 +85,7 @@ export default function HallConfig({ hallId, halls, places }) {
 
     if (hallId !== prev_hallId) {
         setHallId(hallId);
+        //clearPlacesStatus();
         setValues({
             number_of_rows: hallData.number_of_rows,
             chairs_in_row: hallData.chairs_in_row,
@@ -84,73 +116,88 @@ export default function HallConfig({ hallId, halls, places }) {
         ev.preventDefault();
     }
 
+    function handleSubmit(e) {
+        router.post(
+            route(
+                'admin.storeHallConf',
+                [{ hallId: hallId, values: values, places: places_arr }],
+                {
+                    preserveScroll: true,
+                },
+            ),
+        );
+        e.preventDefault();
+    }
+
     return (
         <>
-            <p className="conf-step__paragraph">
-                Укажите количество рядов и максимальное количество кресел в
-                ряду:
-            </p>
-            <div className="conf-step__legend">
-                <label className="conf-step__label">
-                    Рядов, шт
-                    <input
-                        id="number_of_rows"
-                        name="number_of_rows"
-                        type="text"
-                        className="conf-step__input"
-                        value={values.number_of_rows}
-                        placeholder="рядов"
-                        onChange={handleChange}
-                    ></input>
-                </label>
-                <span className="multiplier">x</span>
-                <label className="conf-step__label">
-                    Мест, шт
-                    <input
-                        id="chairs_in_row"
-                        name="chairs_in_row"
-                        type="text"
-                        className="conf-step__input"
-                        value={values.chairs_in_row}
-                        placeholder="мест"
-                        onChange={handleChange}
-                    ></input>
-                </label>
-            </div>
-            <p className="conf-step__paragraph">
-                Теперь вы можете указать типы кресел на схеме зала:
-            </p>
-            <div className="conf-step__legend">
-                <span className="conf-step__chair conf-step__chair_standart"></span>{' '}
-                — обычные кресла
-                <span className="conf-step__chair conf-step__chair_vip"></span>{' '}
-                — VIP кресла
-                <span className="conf-step__chair conf-step__chair_disabled"></span>{' '}
-                — заблокированные (нет кресла)
-                <p className="conf-step__hint">
-                    Чтобы изменить вид кресла, нажмите по нему левой кнопкой
-                    мыши
+            <form className="config-hall-form" onSubmit={handleSubmit}>
+                <p className="conf-step__paragraph">
+                    Укажите количество рядов и максимальное количество кресел в
+                    ряду:
                 </p>
-            </div>
-            {values.number_of_rows > 0 && values.chairs_in_row > 0 && (
-                <div className="conf-step__hall">
-                    <HallPlaces
-                        places={places_arr}
-                        handler={placeClickHandler}
-                    ></HallPlaces>
+                <div className="conf-step__legend">
+                    <label className="conf-step__label">
+                        Рядов, шт
+                        <input
+                            id="number_of_rows"
+                            name="number_of_rows"
+                            type="text"
+                            className="conf-step__input"
+                            value={values.number_of_rows}
+                            placeholder="рядов"
+                            onChange={handleChange}
+                        ></input>
+                    </label>
+                    <span className="multiplier">x</span>
+                    <label className="conf-step__label">
+                        Мест, шт
+                        <input
+                            id="chairs_in_row"
+                            name="chairs_in_row"
+                            type="text"
+                            className="conf-step__input"
+                            value={values.chairs_in_row}
+                            placeholder="мест"
+                            onChange={handleChange}
+                        ></input>
+                    </label>
                 </div>
-            )}
+                <p className="conf-step__paragraph">
+                    Теперь вы можете указать типы кресел на схеме зала:
+                </p>
+                <div className="conf-step__legend">
+                    <span className="conf-step__chair conf-step__chair_standart"></span>{' '}
+                    — обычные кресла
+                    <span className="conf-step__chair conf-step__chair_vip"></span>{' '}
+                    — VIP кресла
+                    <span className="conf-step__chair conf-step__chair_disabled"></span>{' '}
+                    — заблокированные (нет кресла)
+                    <p className="conf-step__hint">
+                        Чтобы изменить вид кресла, нажмите по нему левой кнопкой
+                        мыши
+                    </p>
+                </div>
+                {values.number_of_rows > 0 && values.chairs_in_row > 0 && (
+                    <div className="conf-step__hall">
+                        <HallPlaces
+                            places={places_arr}
+                            handler={placeClickHandler}
+                        ></HallPlaces>
+                    </div>
+                )}
 
-            <fieldset className="conf-step__buttons text-center">
-                <button className="conf-step__button conf-step__button-regular">
-                    Отмена
-                </button>
-                <input
-                    type="submit"
-                    value="Сохранить"
-                    className="conf-step__button conf-step__button-accent"
-                ></input>
-            </fieldset>
+                <fieldset className="conf-step__buttons text-center">
+                    <button className="conf-step__button conf-step__button-regular">
+                        Отмена
+                    </button>
+                    <input
+                        type="submit"
+                        value="Сохранить"
+                        className="conf-step__button conf-step__button-accent"
+                    ></input>
+                </fieldset>
+            </form>
         </>
     );
 }

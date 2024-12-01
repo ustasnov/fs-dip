@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Hall;
+use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -35,6 +37,8 @@ class HallController extends Controller
     public function store(Request $request)
     {
       
+        Log::channel('info')->info($_REQUEST);
+
         Validator::make($request->all(), [
             'name' => 'required|unique:halls'
         ])->validate();
@@ -48,8 +52,14 @@ class HallController extends Controller
         $hall->vip_price = 0;
         $hall->save();
 
-        //return redirect()->route('admin.index')->with('halls', Hall::all());
-        return redirect()->route('admin.index');
+        //return redirect()->route('admin.index');
+        /*
+        return Inertia::render('Settings', [
+          'halls' => Hall::all(),
+          'places' => Place::all(),
+        ]);
+        */
+        to_route('admin.index');
     }
 
     /**

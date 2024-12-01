@@ -3,7 +3,7 @@ import CreateHallButton from '@/Components/Settings/CreateHallButton';
 import HallConfig from '@/Components/Settings/HallConfig';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
 
@@ -43,6 +43,7 @@ export default function Settings(props) {
             s_checked[0] = ev.target.id;
             localStorage.setItem('s_checked', JSON.stringify(s_checked));
             setChecked0(s_checked[0]);
+            router.visit(route('admin.index'), { preserveScroll: true });
         }
         //ev.preventDefault();
     }
@@ -52,6 +53,7 @@ export default function Settings(props) {
             s_checked[1] = ev.target.id;
             localStorage.setItem('s_checked', JSON.stringify(s_checked));
             setChecked1(s_checked[1]);
+            router.visit(route('admin.index'), { preserveScroll: true });
         }
         //ev.preventDefault();
     }

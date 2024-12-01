@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hall;
 use App\Models\Place;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,8 +22,9 @@ class SettingController extends Controller
       ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function storeHallConf(Request $request) {
+      Log::channel('info')->info($_REQUEST);
+      to_route('admin.index');
+    }
     
 }
