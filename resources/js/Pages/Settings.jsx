@@ -23,11 +23,14 @@ export default function Settings(props) {
         localStorage.setItem('s_checked', JSON.stringify(s_checked));
     }
 
+    const scrolly = localStorage.getItem('scrolly');
+    if (scrolly) {
+        window.scrollTo(0, scrolly);
+        localStorage.removeItem('scrolly');
+    }
+
     const [s0_checked, setChecked0] = new useState(s_checked[0]);
     const [s1_checked, setChecked1] = new useState(s_checked[1]);
-    //const [s2_checked, setChecked2] = new useState(s_checked[2]);
-
-    //console.log(halls);
 
     function getErrorMessage(error) {
         if (error === 'validation.unique') {

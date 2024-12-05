@@ -15,7 +15,7 @@ export default function HallConfig({ hallId, halls, places }) {
 
     let places_arr = [];
 
-    const hallPlaces = Array.of(places).filter(
+    const hallPlaces = places.filter(
         (place) => place.hall_id === parseInt(hallId),
     );
 
@@ -27,9 +27,12 @@ export default function HallConfig({ hallId, halls, places }) {
                 for (let c = 0; c < values.chairs_in_row; c++) {
                     const ri = r + 1;
                     const ci = c + 1;
-                    const place = hallPlaces.find(function (val) {
-                        return val.row === ri && val.chair === ci;
-                    });
+                    let place = null;
+                    if (hallPlaces.length > 0) {
+                        place = hallPlaces.find(function (val) {
+                            return val.row === ri && val.chair === ci;
+                        });
+                    }
                     pl_arr[r].push({
                         hall_id: hallData.id,
                         row: ri,
@@ -41,35 +44,6 @@ export default function HallConfig({ hallId, halls, places }) {
         }
         return pl_arr;
     }
-
-    /*
-    function clearPlacesStatus() {
-        /*
-        const containerEl = document.querySelector('.conf-step__hall');
-        if (containerEl) {
-            const placeElements =
-                containerEl.querySelector('.conf-step__chair');
-            if (placeElements) {
-                Array.of(placeElements).forEach((el) => {
-                    if (el.classList.contains('conf-step__chair_standart')) {
-                        el.classList.remove('conf-step__chair_standart');
-                        el.classList.add('conf-step__chair_disabled');
-                    } else if (el.classList.contains('conf-step__chair_vip')) {
-                        el.classList.remove('conf-step__chair_vip');
-                        el.classList.add('conf-step__chair_disabled');
-                    }
-                });
-            }
-        }
-        const containerEl = document.querySelector('.conf-step__hall');
-        if (containerEl) {
-            //containerEl.innerHTML = '';
-            while (containerEl.firstChild) {
-                containerEl.removeChild(containerEl.firstChild);
-            }
-        }
-    }
-    */
 
     places_arr = getPlacesArray();
 
@@ -85,7 +59,6 @@ export default function HallConfig({ hallId, halls, places }) {
 
     if (hallId !== prev_hallId) {
         setHallId(hallId);
-        //clearPlacesStatus();
         setValues({
             number_of_rows: hallData.number_of_rows,
             chairs_in_row: hallData.chairs_in_row,
@@ -117,14 +90,20 @@ export default function HallConfig({ hallId, halls, places }) {
     }
 
     function handleSubmit(e) {
+        const h = [{ id: hallId, ...values }];
+        const pl = [];
+        for (let r = 0; r < places_arr.length; r++) {
+            const row = places_arr[r];
+            for (let c = 0; c < row.length; c++) {
+                pl.push(row[c]);
+            }
+        }
+        let scrollTop = window.scrollY || document.documentElement.scrollTop;
+        //alert('Текущая прокрутка: ' + scrollTop);
+        localStorage.setItem('scrolly', scrollTop);
+
         router.post(
-            route(
-                'admin.storeHallConf',
-                [{ hallId: hallId, values: values, places: places_arr }],
-                {
-                    preserveScroll: true,
-                },
-            ),
+            route('admin.storeHallConf', [{ hallData: h, places: pl }]),
         );
         e.preventDefault();
     }

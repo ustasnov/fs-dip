@@ -25,6 +25,12 @@ Route::get('/admin', [SettingController::class, 'index'])->name('admin.index');
 Route::post('/admin', [HallController::class, 'store'])->name('admin.store');
 Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->name('admin.storeHallConf');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
+Route::get('/clear', function() {    
+  Artisan::call('cache:clear');    
+  Artisan::call('config:cache');    
+  Artisan::call('view:clear');  
+  Artisan::call('route:clear');  
+  return "Кэш очищен.";});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
