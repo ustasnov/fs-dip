@@ -24,6 +24,7 @@ Route::get('/admin', function () {
 Route::get('/admin', [SettingController::class, 'index'])->name('admin.index');
 Route::post('/admin', [HallController::class, 'store'])->name('admin.store');
 Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->name('admin.storeHallConf');
+Route::put('/admin/{id}', [HallController::class, 'update'])->name('admin.update');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
 Route::get('/clear', function() {    
   Artisan::call('cache:clear');    

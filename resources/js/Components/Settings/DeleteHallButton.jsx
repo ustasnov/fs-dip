@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Modal from '../Modal';
 
 export default function DeleteHallButton(props) {
-    const [show, setShow] = new useState(false);
+    const [show, setShow] = useState(false);
     const { id, name } = props;
 
     function onShowModal(ev) {

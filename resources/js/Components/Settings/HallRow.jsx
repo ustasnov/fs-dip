@@ -2,8 +2,6 @@ import HallPlace from './HallPlace';
 
 export default function HallRow(props) {
     const { rowId, hallRow, handler } = props;
-    //console.log('In HallRow');
-    //console.log(hallRow);
 
     return (
         <div className="conf-step__row">

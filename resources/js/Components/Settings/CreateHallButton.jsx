@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Modal from '../Modal';
 
 export default function CreateHallButton() {
-    const [show, setShow] = new useState(false);
+    const [show, setShow] = useState(false);
     const [values, setValues] = useState({ name: '' });
 
     function onShowModal(ev) {

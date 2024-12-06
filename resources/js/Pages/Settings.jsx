@@ -1,6 +1,7 @@
 import ConfStepHeader from '@/Components/Settings/ConfStepHeader';
 import CreateHallButton from '@/Components/Settings/CreateHallButton';
 import HallConfig from '@/Components/Settings/HallConfig';
+import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
 import { router, usePage } from '@inertiajs/react';
@@ -29,8 +30,8 @@ export default function Settings(props) {
         localStorage.removeItem('scrolly');
     }
 
-    const [s0_checked, setChecked0] = new useState(s_checked[0]);
-    const [s1_checked, setChecked1] = new useState(s_checked[1]);
+    const [s0_checked, setChecked0] = useState(s_checked[0]);
+    const [s1_checked, setChecked1] = useState(s_checked[1]);
 
     function getErrorMessage(error) {
         if (error === 'validation.unique') {
@@ -43,7 +44,7 @@ export default function Settings(props) {
 
     function onCheckHandler0(ev) {
         if (ev.target.checked) {
-            s_checked[0] = ev.target.id;
+            s_checked[0] = ev.target.dataset.id;
             localStorage.setItem('s_checked', JSON.stringify(s_checked));
             setChecked0(s_checked[0]);
             router.visit(route('admin.index'), { preserveScroll: true });
@@ -53,23 +54,13 @@ export default function Settings(props) {
 
     function onCheckHandler1(ev) {
         if (ev.target.checked) {
-            s_checked[1] = ev.target.id;
+            s_checked[1] = ev.target.dataset.id;
             localStorage.setItem('s_checked', JSON.stringify(s_checked));
             setChecked1(s_checked[1]);
             router.visit(route('admin.index'), { preserveScroll: true });
         }
         //ev.preventDefault();
     }
-
-    /*
-    function onCheckHandler2(ev) {
-        if (ev.target.checked) {
-            s_checked[2] = ev.target.id;
-            localStorage.setItem('s_checked', JSON.stringify(s_checked));
-            setChecked2(s_checked[2]);
-        }
-    }
-    */
 
     return (
         <>
@@ -143,48 +134,10 @@ export default function Settings(props) {
                             data={halls}
                             onCheckHandler={onCheckHandler1}
                         ></HallsSelector>
-
-                        <p className="conf-step__paragraph">
-                            Установите цены для типов кресел:
-                        </p>
-                        <div className="conf-step__legend">
-                            <label className="conf-step__label">
-                                Цена, рублей
-                                <input
-                                    type="text"
-                                    className="conf-step__input"
-                                    placeholder="0"
-                                ></input>
-                            </label>
-                            за{' '}
-                            <span className="conf-step__chair conf-step__chair_standart"></span>{' '}
-                            обычные кресла
-                        </div>
-                        <div className="conf-step__legend">
-                            <label className="conf-step__label">
-                                Цена, рублей
-                                <input
-                                    type="text"
-                                    className="conf-step__input"
-                                    placeholder="0"
-                                    value="350"
-                                ></input>
-                            </label>
-                            за{' '}
-                            <span className="conf-step__chair conf-step__chair_vip"></span>{' '}
-                            VIP кресла
-                        </div>
-
-                        <fieldset className="conf-step__buttons text-center">
-                            <button className="conf-step__button conf-step__button-regular">
-                                Отмена
-                            </button>
-                            <input
-                                type="submit"
-                                value="Сохранить"
-                                className="conf-step__button conf-step__button-accent"
-                            ></input>
-                        </fieldset>
+                        <HallPricesConfig
+                            hallId={s1_checked}
+                            halls={halls}
+                        ></HallPricesConfig>
                     </div>
                 </section>
 

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\Hall;
-use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class HallController extends Controller
@@ -81,9 +81,16 @@ class HallController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hall $hall)
+    public function update(Request $request, int $id)
     {
-        //
+      $hall = Hall::find($id);
+      $hall->price = $request->price;
+      $hall->vip_price = $request->vip_price;
+      
+      $hall->save();
+ 
+      //Session::flash('message', 'Цены успешно обновлены!');
+      return redirect()->route('admin.index');
     }
 
     /**

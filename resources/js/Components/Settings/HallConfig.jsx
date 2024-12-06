@@ -3,12 +3,12 @@ import { useState } from 'react';
 import HallPlaces from './HallPlaces';
 
 export default function HallConfig({ hallId, halls, places }) {
-    const [prev_hallId, setHallId] = new useState(hallId);
+    const [prev_hallId, setHallId] = useState(hallId);
     let hallData = halls.find(function (hall) {
         return hall.id === parseInt(hallId);
     });
 
-    const [values, setValues] = new useState({
+    const [values, setValues] = useState({
         number_of_rows: hallData.number_of_rows,
         chairs_in_row: hallData.chairs_in_row,
     });
@@ -98,8 +98,7 @@ export default function HallConfig({ hallId, halls, places }) {
                 pl.push(row[c]);
             }
         }
-        let scrollTop = window.scrollY || document.documentElement.scrollTop;
-        //alert('Текущая прокрутка: ' + scrollTop);
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
         localStorage.setItem('scrolly', scrollTop);
 
         router.post(
@@ -108,9 +107,20 @@ export default function HallConfig({ hallId, halls, places }) {
         e.preventDefault();
     }
 
+    function handleReset(e) {
+        e.preventDefault();
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        localStorage.setItem('scrolly', scrollTop);
+        router.get(route('admin.index'));
+    }
+
     return (
         <>
-            <form className="config-hall-form" onSubmit={handleSubmit}>
+            <form
+                className="config-hall-form"
+                onSubmit={handleSubmit}
+                onReset={handleReset}
+            >
                 <p className="conf-step__paragraph">
                     Укажите количество рядов и максимальное количество кресел в
                     ряду:
@@ -167,7 +177,10 @@ export default function HallConfig({ hallId, halls, places }) {
                 )}
 
                 <fieldset className="conf-step__buttons text-center">
-                    <button className="conf-step__button conf-step__button-regular">
+                    <button
+                        type="reset"
+                        className="conf-step__button conf-step__button-regular"
+                    >
                         Отмена
                     </button>
                     <input
