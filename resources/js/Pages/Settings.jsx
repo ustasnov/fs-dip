@@ -7,7 +7,7 @@ import HallsSelector from '@/Components/Settings/HallsSelector';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
-import { restorePosition, savePosition } from '@/utils';
+import { restorePosition } from '@/utils';
 
 export default function Settings(props) {
     const { halls, places } = props;
