@@ -7,6 +7,7 @@ import HallsSelector from '@/Components/Settings/HallsSelector';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
+import { restorePosition, savePosition } from '@/utils';
 
 export default function Settings(props) {
     const { halls, places } = props;
@@ -17,18 +18,15 @@ export default function Settings(props) {
         s_opened = JSON.parse(s_opened_str);
     }
     const s_checked_str = localStorage.getItem('s_checked');
-    let s_checked = ['1', '1', '1'];
+    const firstHallId = halls.length === 0 ? '0' : halls[0].id.toString();
+    let s_checked = [firstHallId, firstHallId];
     if (s_checked_str) {
         s_checked = JSON.parse(s_checked_str);
     } else {
         localStorage.setItem('s_checked', JSON.stringify(s_checked));
     }
 
-    const scrolly = localStorage.getItem('scrolly');
-    if (scrolly) {
-        window.scrollTo(0, scrolly);
-        localStorage.removeItem('scrolly');
-    }
+    restorePosition();
 
     const [s0_checked, setChecked0] = useState(s_checked[0]);
     const [s1_checked, setChecked1] = useState(s_checked[1]);
@@ -42,24 +40,24 @@ export default function Settings(props) {
         return '';
     }
 
+    function handleCheck(ev, sectionId) {
+        s_checked[sectionId] = ev.target.dataset.id;
+        localStorage.setItem('s_checked', JSON.stringify(s_checked));
+        setChecked0(s_checked[sectionId]);
+        //savePosition();
+        router.visit(route('admin.index'), { preserveScroll: true });
+    }
+
     function onCheckHandler0(ev) {
         if (ev.target.checked) {
-            s_checked[0] = ev.target.dataset.id;
-            localStorage.setItem('s_checked', JSON.stringify(s_checked));
-            setChecked0(s_checked[0]);
-            router.visit(route('admin.index'), { preserveScroll: true });
+            handleCheck(ev, 0);
         }
-        //ev.preventDefault();
     }
 
     function onCheckHandler1(ev) {
         if (ev.target.checked) {
-            s_checked[1] = ev.target.dataset.id;
-            localStorage.setItem('s_checked', JSON.stringify(s_checked));
-            setChecked1(s_checked[1]);
-            router.visit(route('admin.index'), { preserveScroll: true });
+            handleCheck(ev, 1);
         }
-        //ev.preventDefault();
     }
 
     return (

@@ -1,12 +1,17 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import HallPlaces from './HallPlaces';
+import { savePosition } from '@/utils';
 
 export default function HallConfig({ hallId, halls, places }) {
     const [prev_hallId, setHallId] = useState(hallId);
     let hallData = halls.find(function (hall) {
         return hall.id === parseInt(hallId);
     });
+
+    if (!hallData) {
+        return ('');
+    }
 
     const [values, setValues] = useState({
         number_of_rows: hallData.number_of_rows,
@@ -98,8 +103,11 @@ export default function HallConfig({ hallId, halls, places }) {
                 pl.push(row[c]);
             }
         }
+        /*
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         localStorage.setItem('scrolly', scrollTop);
+        */
+        savePosition();
 
         router.post(
             route('admin.storeHallConf', [{ hallData: h, places: pl }]),
@@ -109,8 +117,11 @@ export default function HallConfig({ hallId, halls, places }) {
 
     function handleReset(e) {
         e.preventDefault();
+        /*
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         localStorage.setItem('scrolly', scrollTop);
+        */
+        savePosition();
         router.get(route('admin.index'));
     }
 

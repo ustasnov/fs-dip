@@ -1,3 +1,4 @@
+import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -6,6 +7,10 @@ export default function HallPricesConfig({ hallId, halls }) {
     const hallData = halls.find(function (hall) {
         return hall.id === parseInt(hallId);
     });
+
+    if (!hallData) {
+        return ('');
+    }
 
     const [values, setValues] = useState({
         price: hallData.price,
@@ -30,8 +35,11 @@ export default function HallPricesConfig({ hallId, halls }) {
     }
 
     function handleSubmit(e) {
+        /*
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         localStorage.setItem('scrolly', scrollTop);
+        */
+        savePosition();
 
         router.put(route('admin.update', hallId), { ...values });
         e.preventDefault();
@@ -39,8 +47,11 @@ export default function HallPricesConfig({ hallId, halls }) {
 
     function handleReset(e) {
         e.preventDefault();
+        /*
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
         localStorage.setItem('scrolly', scrollTop);
+        */
+        savePosition();
 
         router.get(route('admin.index'));
     }
