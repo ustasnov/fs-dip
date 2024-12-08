@@ -14,6 +14,9 @@ export default function DeleteHallButton(props) {
     function onCloseModal(ev) {
         setShow(false);
         if (ev.target.classList.contains('conf-step__button-accent')) {
+            const scrollTop =
+                window.scrollY || document.documentElement.scrollTop;
+            localStorage.setItem('scrolly', scrollTop);
             router.delete(route('admin.destroy', ev.target.id), {
                 method: 'delete',
             });

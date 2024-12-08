@@ -26,8 +26,10 @@ export default function CreateHallButton() {
     }
 
     function handleSubmit(e) {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        localStorage.setItem('scrolly', scrollTop);
         setShow(false);
-        router.post(route('admin.store', values, { preserveScroll: true }));
+        router.post(route('admin.store', values));
         e.preventDefault();
     }
 
