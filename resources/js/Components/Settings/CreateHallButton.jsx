@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
+import { savePosition } from '@/utils';
 
 export default function CreateHallButton() {
     const [show, setShow] = useState(false);
@@ -25,12 +26,22 @@ export default function CreateHallButton() {
         }));
     }
 
+    function closeErrorMеssage() {
+        let errorTimeout = setTimeout(() => {
+            const errorMessageEl = document.querySelector('.conf-step__button-error');
+            if (errorMessageEl) {
+                router.visit(route('admin.index'), { preserveScroll: true });
+            }
+            clearTimeout(errorTimeout);
+        }, 2000);
+    }
+
     function handleSubmit(e) {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        localStorage.setItem('scrolly', scrollTop);
+        savePosition();
         setShow(false);
         router.post(route('admin.store', values));
         e.preventDefault();
+        closeErrorMеssage();
     }
 
     useEffect(() => {

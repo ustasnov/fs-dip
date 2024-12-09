@@ -858,9 +858,19 @@ textarea.conf-step__input {
     border-color: #63536c;
 }
 
+.dialog-textarea {
+    resize: none;
+}
+
 .dialog-field {
     display: flex;
     flex-direction: column;
+}
+
+.dialog-field-inline {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
 }
 
 .dialog-text {
@@ -884,16 +894,16 @@ textarea.conf-step__input {
 }
 
 .conf-step__button-with-error {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .conf-step__button-error {
-  margin: 17px 0 0 10px;
-  padding: 5px 10px;
-  background-color: brown;  
-  color: #caff85;
-  font-size: 1.6rem;
-  font-weight: 400;
-  border-radius: 5px;
+    margin: 17px 0 0 10px;
+    padding: 5px 10px;
+    background-color: brown;
+    color: #caff85;
+    font-size: 1.6rem;
+    font-weight: 400;
+    border-radius: 5px;
 }

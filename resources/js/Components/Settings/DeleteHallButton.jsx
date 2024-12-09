@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import Modal from '../Modal';
+import { savePosition } from '@/utils';
 
 export default function DeleteHallButton(props) {
     const [show, setShow] = useState(false);
@@ -14,9 +15,7 @@ export default function DeleteHallButton(props) {
     function onCloseModal(ev) {
         setShow(false);
         if (ev.target.classList.contains('conf-step__button-accent')) {
-            const scrollTop =
-                window.scrollY || document.documentElement.scrollTop;
-            localStorage.setItem('scrolly', scrollTop);
+            savePosition();
             router.delete(route('admin.destroy', ev.target.id), {
                 method: 'delete',
             });

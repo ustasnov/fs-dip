@@ -4,6 +4,7 @@ import HallConfig from '@/Components/Settings/HallConfig';
 import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
+import CreateFilmButton from '@/Components/Settings/CreateFilmButton';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
@@ -147,9 +148,7 @@ export default function Settings(props) {
                     ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
-                            <button className="conf-step__button conf-step__button-accent">
-                                Добавить фильм
-                            </button>
+                            <CreateFilmButton></CreateFilmButton>
                         </p>
                         <div className="conf-step__movies">
                             <div className="conf-step__movie">
