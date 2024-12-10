@@ -176,6 +176,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'name' => [
+          'required' => 'Не запонено наименование!',
+          'unique' => 'Такое наименование уже есть!',
+        ],
     ],
 
     /*

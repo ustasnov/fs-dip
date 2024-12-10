@@ -1,7 +1,7 @@
+import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import Modal from '../Modal';
-import { savePosition } from '@/utils';
 
 export default function DeleteHallButton(props) {
     const [show, setShow] = useState(false);

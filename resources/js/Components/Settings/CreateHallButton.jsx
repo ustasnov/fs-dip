@@ -1,7 +1,7 @@
+import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
-import { savePosition } from '@/utils';
 
 export default function CreateHallButton() {
     const [show, setShow] = useState(false);
@@ -28,7 +28,9 @@ export default function CreateHallButton() {
 
     function closeErrorMеssage() {
         let errorTimeout = setTimeout(() => {
-            const errorMessageEl = document.querySelector('.conf-step__button-error');
+            const errorMessageEl = document.querySelector(
+                '.conf-step__button-error',
+            );
             if (errorMessageEl) {
                 router.visit(route('admin.index'), { preserveScroll: true });
             }

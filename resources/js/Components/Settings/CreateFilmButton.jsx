@@ -1,7 +1,7 @@
+import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
-import { savePosition } from '@/utils';
 
 export default function CreateFilmButton() {
     const [show, setShow] = useState(false);
@@ -28,7 +28,9 @@ export default function CreateFilmButton() {
 
     function closeErrorMеssage() {
         let errorTimeout = setTimeout(() => {
-            const errorMessageEl = document.querySelector('.conf-step__button-error');
+            const errorMessageEl = document.querySelector(
+                '.conf-step__button-error',
+            );
             if (errorMessageEl) {
                 router.visit(route('admin.index'), { preserveScroll: true });
             }
@@ -41,7 +43,7 @@ export default function CreateFilmButton() {
         setShow(false);
         //router.post(route('admin.store', values));
         e.preventDefault();
-        //closeErrorMеssage();
+        closeErrorMеssage();
     }
 
     useEffect(() => {
@@ -70,7 +72,10 @@ export default function CreateFilmButton() {
                         <div className="dialog-header">Новый фильм</div>
                         <div className="dialog-content">
                             <div className="dialog-field">
-                                <label htmlFor="film-name" className="dialog-label">
+                                <label
+                                    htmlFor="film-name"
+                                    className="dialog-label"
+                                >
                                     Наименование:
                                 </label>
                                 <input
@@ -79,12 +84,15 @@ export default function CreateFilmButton() {
                                     data-id="name"
                                     name="name"
                                     value={values.name}
-                                    placeholder='Название фильма'
+                                    placeholder="Название фильма"
                                     onChange={handleChange}
                                 />
                             </div>
                             <div className="dialog-field">
-                                <label htmlFor="film-description" className="dialog-label">
+                                <label
+                                    htmlFor="film-description"
+                                    className="dialog-label"
+                                >
                                     Описание:
                                 </label>
                                 <textarea
@@ -94,12 +102,15 @@ export default function CreateFilmButton() {
                                     name="description"
                                     rows="5"
                                     value={values.description}
-                                    placeholder='Краткое описание'
+                                    placeholder="Краткое описание"
                                     onChange={handleChange}
                                 ></textarea>
                             </div>
                             <div className="dialog-field-inline">
-                                <label htmlFor="film-year" className="dialog-label">
+                                <label
+                                    htmlFor="film-year"
+                                    className="dialog-label"
+                                >
                                     Год выпуска:
                                 </label>
                                 <input
@@ -109,12 +120,15 @@ export default function CreateFilmButton() {
                                     data-id="year"
                                     name="year"
                                     value={values.year}
-                                    placeholder='Год'
+                                    placeholder="Год"
                                     onChange={handleChange}
                                 />
                             </div>
                             <div className="dialog-field-inline">
-                                <label htmlFor="film-duration" className="dialog-label">
+                                <label
+                                    htmlFor="film-duration"
+                                    className="dialog-label"
+                                >
                                     Продолжительность:
                                 </label>
                                 <input
@@ -124,7 +138,7 @@ export default function CreateFilmButton() {
                                     data-id="duration"
                                     name="duration"
                                     value={values.duration}
-                                    placeholder='Минут'
+                                    placeholder="Минут"
                                     onChange={handleChange}
                                 />
                             </div>

@@ -1,14 +1,14 @@
 import ConfStepHeader from '@/Components/Settings/ConfStepHeader';
+import CreateFilmButton from '@/Components/Settings/CreateFilmButton';
 import CreateHallButton from '@/Components/Settings/CreateHallButton';
 import HallConfig from '@/Components/Settings/HallConfig';
 import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
-import CreateFilmButton from '@/Components/Settings/CreateFilmButton';
+import { restorePosition } from '@/utils';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
-import { restorePosition } from '@/utils';
 
 export default function Settings(props) {
     const { halls, places } = props;
@@ -33,14 +33,16 @@ export default function Settings(props) {
     const [s1_checked, setChecked1] = useState(s_checked[1]);
 
     function getErrorMessage(error) {
+        console.log(`error: ${error}`);
         if (error === 'validation.unique') {
             return 'Зал с таким именем уже есть!';
         } else if (error === 'validation.required') {
             return 'Имя зала не может быть пустым!';
         }
-        return '';
+        return error;
     }
 
+    /*
     function handleCheck(ev, sectionId) {
         s_checked[sectionId] = ev.target.dataset.id;
         localStorage.setItem('s_checked', JSON.stringify(s_checked));
@@ -48,16 +50,25 @@ export default function Settings(props) {
         //savePosition();
         router.visit(route('admin.index'), { preserveScroll: true });
     }
+    */
 
     function onCheckHandler0(ev) {
         if (ev.target.checked) {
-            handleCheck(ev, 0);
+            s_checked[0] = ev.target.dataset.id;
+            localStorage.setItem('s_checked', JSON.stringify(s_checked));
+            setChecked0(s_checked[0]);
+            //savePosition();
+            router.visit(route('admin.index'), { preserveScroll: true });
         }
     }
 
     function onCheckHandler1(ev) {
         if (ev.target.checked) {
-            handleCheck(ev, 1);
+            s_checked[1] = ev.target.dataset.id;
+            localStorage.setItem('s_checked', JSON.stringify(s_checked));
+            setChecked1(s_checked[1]);
+            //savePosition();
+            router.visit(route('admin.index'), { preserveScroll: true });
         }
     }
 

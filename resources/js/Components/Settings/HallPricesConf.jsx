@@ -9,7 +9,7 @@ export default function HallPricesConfig({ hallId, halls }) {
     });
 
     if (!hallData) {
-        return ('');
+        return '';
     }
 
     const [values, setValues] = useState({
@@ -35,25 +35,15 @@ export default function HallPricesConfig({ hallId, halls }) {
     }
 
     function handleSubmit(e) {
-        /*
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        localStorage.setItem('scrolly', scrollTop);
-        */
         savePosition();
-
         router.put(route('admin.update', hallId), { ...values });
         e.preventDefault();
     }
 
     function handleReset(e) {
         e.preventDefault();
-        /*
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        localStorage.setItem('scrolly', scrollTop);
-        */
         savePosition();
-
-        router.get(route('admin.index'));
+        router.visit(route('admin.index'), { preserveScroll: true });
     }
 
     return (
