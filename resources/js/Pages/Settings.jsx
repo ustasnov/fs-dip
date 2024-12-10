@@ -33,7 +33,7 @@ export default function Settings(props) {
     const [s1_checked, setChecked1] = useState(s_checked[1]);
 
     function getErrorMessage(error) {
-        console.log(`error: ${error}`);
+        //console.log(`error: ${error}`);
         if (error === 'validation.unique') {
             return 'Зал с таким именем уже есть!';
         } else if (error === 'validation.required') {

@@ -1,11 +1,18 @@
 import { savePosition } from '@/utils';
-import { router } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import Modal from '../Modal';
 
 export default function CreateFilmButton() {
     const [show, setShow] = useState(false);
-    const [values, setValues] = useState({ name: '', description: '' });
+    //const [values, setValues] = useState({ name: '', description: '' });
+    const { data, setData, post, progress } = useForm({
+        name: null,
+        description: null,
+        year: null,
+        duration: null,
+        poster: "",
+    });
 
     function onShowModal(ev) {
         setShow(true);
@@ -17,6 +24,7 @@ export default function CreateFilmButton() {
         ev.preventDefault();
     }
 
+    /*
     function handleChange(e) {
         const key = e.target.dataset.id;
         const value = e.target.value;
@@ -24,6 +32,22 @@ export default function CreateFilmButton() {
             ...values,
             [key]: value,
         }));
+    }
+    */
+
+    function handleChange(e) {
+        const key = e.target.dataset.id;
+        const value = key === "poster" ? e.target.files[0] : e.target.value;
+        setData((data) => ({
+            ...data,
+            [key]: value,
+        }));
+        if (key === "poster") {
+            //console.log('Загружаем изображение');
+            let reader = new FileReader();
+            reader.onload = e => document.querySelector('.poster-img').src = e.target.result;
+            reader.readAsDataURL(e.target.files[0]);
+        }
     }
 
     function closeErrorMеssage() {
@@ -83,7 +107,7 @@ export default function CreateFilmButton() {
                                     className="dialog-input"
                                     data-id="name"
                                     name="name"
-                                    value={values.name}
+                                    value={data.name}
                                     placeholder="Название фильма"
                                     onChange={handleChange}
                                 />
@@ -101,7 +125,7 @@ export default function CreateFilmButton() {
                                     data-id="description"
                                     name="description"
                                     rows="5"
-                                    value={values.description}
+                                    value={data.description}
                                     placeholder="Краткое описание"
                                     onChange={handleChange}
                                 ></textarea>
@@ -119,7 +143,7 @@ export default function CreateFilmButton() {
                                     className="dialog-input"
                                     data-id="year"
                                     name="year"
-                                    value={values.year}
+                                    value={data.year}
                                     placeholder="Год"
                                     onChange={handleChange}
                                 />
@@ -137,12 +161,34 @@ export default function CreateFilmButton() {
                                     className="dialog-input"
                                     data-id="duration"
                                     name="duration"
-                                    value={values.duration}
+                                    value={data.duration}
                                     placeholder="Минут"
                                     onChange={handleChange}
                                 />
                             </div>
+                            <div className="dialog-field">
+                                <label
+                                    htmlFor="film-poster"
+                                    className="dialog-label"
+                                >
+                                    Постер:
+                                </label>
+                                <input
+                                    type="file"
+                                    id="film-poster"
+                                    className="dialog-input"
+                                    data-id="poster"
+                                    name="poster"
+                                    value={data.value}
+                                    placeholder="Файл постера"
+                                    onChange={handleChange}
+                                />
+                                <div className="dialog-image">
+                                    <img className="poster-img"></img>
+                                </div>
+                            </div>
                         </div>
+
                         <div className="dialog-footer">
                             <button
                                 className="conf-step__button conf-step__button-regular"
