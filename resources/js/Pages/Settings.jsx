@@ -5,13 +5,14 @@ import HallConfig from '@/Components/Settings/HallConfig';
 import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
+import MoviesList from '@/Components/Settings/MoviesList';
 import { restorePosition } from '@/utils';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import posterImgUrl from '../../images/poster.png';
 
 export default function Settings(props) {
-    const { halls, places } = props;
+    const { halls, places, movies } = props;
     const { errors } = usePage().props;
     const s_opened_str = localStorage.getItem('s_opened');
     let s_opened = ['1', '1', '1', '1', '1'];
@@ -159,80 +160,17 @@ export default function Settings(props) {
                     ></ConfStepHeader>
                     <div className="conf-step__wrapper">
                         <p className="conf-step__paragraph">
-                            <CreateFilmButton></CreateFilmButton>
+                            <div className="conf-step__button-with-error">
+                                <CreateFilmButton></CreateFilmButton>
+                                {errors.name && (
+                                    <div className="conf-step__button-error">
+                                        {getErrorMessage(errors.name)}
+                                    </div>
+                                )}
+                            </div>
                         </p>
-                        <div className="conf-step__movies">
-                            <div className="conf-step__movie">
-                                <img
-                                    className="conf-step__movie-poster"
-                                    alt="poster"
-                                    src={posterImgUrl}
-                                ></img>
-                                <h3 className="conf-step__movie-title">
-                                    Звёздные войны XXIII: Атака клонированных
-                                    клонов
-                                </h3>
-                                <p className="conf-step__movie-duration">
-                                    130 минут
-                                </p>
-                            </div>
 
-                            <div className="conf-step__movie">
-                                <img
-                                    className="conf-step__movie-poster"
-                                    alt="poster"
-                                    src={posterImgUrl}
-                                ></img>
-                                <h3 className="conf-step__movie-title">
-                                    Миссия выполнима
-                                </h3>
-                                <p className="conf-step__movie-duration">
-                                    120 минут
-                                </p>
-                            </div>
-
-                            <div className="conf-step__movie">
-                                <img
-                                    className="conf-step__movie-poster"
-                                    alt="poster"
-                                    src={posterImgUrl}
-                                ></img>
-                                <h3 className="conf-step__movie-title">
-                                    Серая пантера
-                                </h3>
-                                <p className="conf-step__movie-duration">
-                                    90 минут
-                                </p>
-                            </div>
-
-                            <div className="conf-step__movie">
-                                <img
-                                    className="conf-step__movie-poster"
-                                    alt="poster"
-                                    src={posterImgUrl}
-                                ></img>
-                                <h3 className="conf-step__movie-title">
-                                    Движение вбок
-                                </h3>
-                                <p className="conf-step__movie-duration">
-                                    95 минут
-                                </p>
-                            </div>
-
-                            <div className="conf-step__movie">
-                                <img
-                                    className="conf-step__movie-poster"
-                                    alt="poster"
-                                    src={posterImgUrl}
-                                ></img>
-                                <h3 className="conf-step__movie-title">
-                                    Кот Да Винчи
-                                </h3>
-                                <p className="conf-step__movie-duration">
-                                    100 минут
-                                </p>
-                            </div>
-                        </div>
+                        <MoviesList data={movies}></MoviesList>
 
                         <div className="conf-step__seances">
                             <div className="conf-step__seances-hall">

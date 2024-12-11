@@ -6,6 +6,8 @@ use App\Models\Film;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class FilmController extends Controller
 {
@@ -30,12 +32,26 @@ class FilmController extends Controller
    */
   public function store(Request $request)
   {
+
+    /*
+    Log::channel('info')->info("name: $request->name" . PHP_EOL .
+        "description: $request->description" . PHP_EOL .
+        "year: $request->year" . PHP_EOL .
+        "duration: $request->duration" . PHP_EOL .
+        "request: $request"
+    );
+    */
+
     Validator::make($request->all(), [
       'name' => 'required|unique:films',
       'year' => 'required|integer|min:1895',
       'duration' => 'required',
-      'poster' => 'image'
+      //'poster' => 'image'
     ])->validate();
+
+    $path = Storage::putFile('posters', $request->file('poster'), 'public');
+
+    //$path = $request->file('poster')->store('posters');
 
     $film = new Film();
 
@@ -43,7 +59,7 @@ class FilmController extends Controller
     $film->description = $request->description;
     $film->year = $request->year;
     $film->duration = $request->duration;
-    $film->poster = 'image';
+    $film->poster = $path;
     $film->save();
 
     to_route('admin.index');

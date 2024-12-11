@@ -65,7 +65,7 @@ export default function CreateFilmButton() {
     function handleSubmit(e) {
         savePosition();
         setShow(false);
-        //router.post(route('admin.store', values));
+        post(route('admin.storeFilm'));
         e.preventDefault();
         closeErrorMеssage();
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hall;
 use App\Models\Place;
+use App\Models\Film;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -21,16 +22,17 @@ class SettingController extends Controller
       return Inertia::render('Settings', [
         'halls' => Hall::all(),
         'places' => Place::all(),
+        'movies' => Film::all(),
       ]);
     }
 
     public function storeHallConf(Request $request) {
       //Log::channel('info')->info($_REQUEST);
-        DB::table('halls')->upsert($request['hallData'], 
+        DB::table('halls')->upsert($request['hallData'],
         ['id'], ['number_of_rows', 'chairs_in_row']);
-        DB::table('places')->upsert($request['places'], 
+        DB::table('places')->upsert($request['places'],
         ['hall_id', 'row', 'chair'], ['status', 'status']);
         to_route('admin.index');
     }
-    
+
 }
