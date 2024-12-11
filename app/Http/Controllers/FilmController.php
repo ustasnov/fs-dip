@@ -33,20 +33,11 @@ class FilmController extends Controller
   public function store(Request $request)
   {
 
-    /*
-    Log::channel('info')->info("name: $request->name" . PHP_EOL .
-        "description: $request->description" . PHP_EOL .
-        "year: $request->year" . PHP_EOL .
-        "duration: $request->duration" . PHP_EOL .
-        "request: $request"
-    );
-    */
-
     Validator::make($request->all(), [
       'name' => 'required|unique:films',
       'year' => 'required|integer|min:1895',
-      'duration' => 'required',
-      //'poster' => 'image'
+      'duration' => 'required|integer',
+      'poster' => 'image',
     ])->validate();
 
     $path = Storage::putFile('posters', $request->file('poster'), 'public');

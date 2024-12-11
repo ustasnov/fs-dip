@@ -59,7 +59,7 @@ export default function CreateFilmButton() {
                 router.visit(route('admin.index'), { preserveScroll: true });
             }
             clearTimeout(errorTimeout);
-        }, 2000);
+        }, 5000);
     }
 
     function handleSubmit(e) {

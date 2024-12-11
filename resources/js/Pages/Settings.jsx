@@ -164,7 +164,22 @@ export default function Settings(props) {
                                 <CreateFilmButton></CreateFilmButton>
                                 {errors.name && (
                                     <div className="conf-step__button-error">
-                                        {getErrorMessage(errors.name)}
+                                        {errors.name}
+                                    </div>
+                                )}
+                                {errors.year && (
+                                    <div className="conf-step__button-error">
+                                        {errors.year}
+                                    </div>
+                                )}
+                                {errors.duration && (
+                                    <div className="conf-step__button-error">
+                                        {errors.duration}
+                                    </div>
+                                )}
+                                {errors.poster && (
+                                    <div className="conf-step__button-error">
+                                        {errors.poster}
                                     </div>
                                 )}
                             </div>
