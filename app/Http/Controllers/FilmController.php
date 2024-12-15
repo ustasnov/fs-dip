@@ -40,7 +40,7 @@ class FilmController extends Controller
       'poster' => 'image',
     ])->validate();
 
-    $path = Storage::putFile('posters', $request->file('poster'), 'public');
+    $path = Storage::putFile('posters', $request->file('poster'));
 
     //$path = $request->file('poster')->store('posters');
 

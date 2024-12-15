@@ -8,13 +8,8 @@ export default function MoviesList(props) {
             {data && (
                 <div className="conf-step__movies">
                     {data.map((val) => (
-                        <Movie
-                            name={val.name}
-                            duration={val.duration}
-                            poster={val.poster}
-                        ></Movie>
-                    ))
-                    }
+                        <Movie key={val} data={val}></Movie>
+                    ))}
                 </div>
             )}
         </>

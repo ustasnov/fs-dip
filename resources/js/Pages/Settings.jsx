@@ -6,10 +6,10 @@ import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
 import HallsSelector from '@/Components/Settings/HallsSelector';
 import MoviesList from '@/Components/Settings/MoviesList';
+import Seances from '@/Components/Settings/Seances';
 import { restorePosition } from '@/utils';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import Seances from '@/Components/Settings/Seances';
 
 export default function Settings(props) {
     const { halls, places, movies, seances } = props;
@@ -42,6 +42,19 @@ export default function Settings(props) {
         }
         return error;
     }
+
+    window.onclick = function (event) {
+        if (!event.target.matches('.conf-step__movie-title')) {
+            var dropdowns = document.getElementsByClassName('dropdown-content');
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    };
 
     /*
     function handleCheck(ev, sectionId) {
@@ -185,13 +198,8 @@ export default function Settings(props) {
                             </div>
                         </p>
 
-                        <MoviesList
-                            data={movies}
-                        ></MoviesList>
-                        <Seances
-                            halls={halls}
-                            seances={seances}
-                        ></Seances>
+                        <MoviesList data={movies}></MoviesList>
+                        <Seances halls={halls} seances={seances}></Seances>
                     </div>
                 </section>
 

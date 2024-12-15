@@ -6,12 +6,12 @@ import Modal from '../Modal';
 export default function CreateFilmButton() {
     const [show, setShow] = useState(false);
     //const [values, setValues] = useState({ name: '', description: '' });
-    const { data, setData, post, progress } = useForm({
+    const { data, setData, post } = useForm({
         name: null,
         description: null,
         year: null,
         duration: null,
-        poster: "",
+        poster: '',
     });
 
     function onShowModal(ev) {
@@ -37,15 +37,16 @@ export default function CreateFilmButton() {
 
     function handleChange(e) {
         const key = e.target.dataset.id;
-        const value = key === "poster" ? e.target.files[0] : e.target.value;
+        const value = key === 'poster' ? e.target.files[0] : e.target.value;
         setData((data) => ({
             ...data,
             [key]: value,
         }));
-        if (key === "poster") {
+        if (key === 'poster') {
             //console.log('Загружаем изображение');
             let reader = new FileReader();
-            reader.onload = e => document.querySelector('.poster-img').src = e.target.result;
+            reader.onload = (e) =>
+                (document.querySelector('.poster-img').src = e.target.result);
             reader.readAsDataURL(e.target.files[0]);
         }
     }

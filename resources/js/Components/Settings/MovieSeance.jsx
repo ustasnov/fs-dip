@@ -12,17 +12,12 @@ export default function MovieSeance(props) {
             className="conf-step__seances-movie"
             style={{
                 width: { width },
-                backgroundColor:
-                    { color },
+                backgroundColor: { color },
                 left: { start_offset },
             }}
         >
-            <p className="conf-step__seances-movie-title">
-                {data.film_name}
-            </p>
-            <p className="conf-step__seances-movie-start">
-                {timeStr}
-            </p>
+            <p className="conf-step__seances-movie-title">{data.film_name}</p>
+            <p className="conf-step__seances-movie-start">{timeStr}</p>
         </div>
     );
 }

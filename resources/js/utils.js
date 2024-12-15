@@ -15,11 +15,11 @@ export function savePosition() {
 export function minutesToTimeStr(minutes) {
     let hours = String(Math.floor(minutes / 60));
     if (hours.length === 1) {
-        hours = "0" + hours;
+        hours = '0' + hours;
     }
     let minut = String(minutes % 60);
     if (minut.length === 1) {
-        minut = "0" + minut;
+        minut = '0' + minut;
     }
     return hours + ':' + minut;
 }

@@ -1,4 +1,4 @@
-import HallSeances from "./HallSeances";
+import HallSeances from './HallSeances';
 
 export default function Seances(props) {
     const { halls, seances } = props;
