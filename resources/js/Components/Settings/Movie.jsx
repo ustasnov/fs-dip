@@ -1,13 +1,15 @@
 import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
+//import DeleteFilmDialog from '../DeleteFilmDialog';
 import Modal from '../Modal';
 
 export default function Movie({ data }) {
     const [showDelete, setShowDelete] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
     const posterUrl = `/storage/${data.poster}`;
 
-    function onShowDeleteModal(ev) {
+    function showDeleteModal(ev) {
         setShowDelete(true);
         ev.preventDefault();
     }
@@ -19,6 +21,20 @@ export default function Movie({ data }) {
             router.delete(route('admin.destroyFilm', ev.target.dataset.id), {
                 method: 'delete',
             });
+        }
+        ev.preventDefault();
+    }
+
+    function showUpdateModal(ev) {
+        setShowUpdate(true);
+        ev.preventDefault();
+    }
+
+    function onCloseUpdateModal(ev) {
+        setShowUpdate(false);
+        if (ev.target.classList.contains('conf-step__button-accent')) {
+            savePosition();
+            router.put(route('admin.updateFilm', ev.target.dataset.id));
         }
         ev.preventDefault();
     }
@@ -69,7 +85,7 @@ export default function Movie({ data }) {
         closeMenu(ev);
         ev.preventDefault();
         ev.stopPropagation();
-        onShowDeleteModal();
+        showDeleteModal();
     }
 
     return (

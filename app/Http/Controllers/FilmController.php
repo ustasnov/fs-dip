@@ -85,7 +85,10 @@ class FilmController extends Controller
    */
   public function destroy(int $id)
   {
+    $film = Film::find($id);
     $res = Film::destroy($id);
+    Storage::delete($film->poster);
+
     return redirect()->route('admin.index');
   }
 }

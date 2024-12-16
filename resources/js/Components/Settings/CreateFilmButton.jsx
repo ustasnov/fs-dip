@@ -5,7 +5,6 @@ import Modal from '../Modal';
 
 export default function CreateFilmButton() {
     const [show, setShow] = useState(false);
-    //const [values, setValues] = useState({ name: '', description: '' });
     const { data, setData, post } = useForm({
         name: null,
         description: null,
@@ -23,17 +22,6 @@ export default function CreateFilmButton() {
         setShow(false);
         ev.preventDefault();
     }
-
-    /*
-    function handleChange(e) {
-        const key = e.target.dataset.id;
-        const value = e.target.value;
-        setValues((values) => ({
-            ...values,
-            [key]: value,
-        }));
-    }
-    */
 
     function handleChange(e) {
         const key = e.target.dataset.id;
