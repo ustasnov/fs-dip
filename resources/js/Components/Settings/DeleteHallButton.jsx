@@ -16,7 +16,7 @@ export default function DeleteHallButton(props) {
         setShow(false);
         if (ev.target.classList.contains('conf-step__button-accent')) {
             savePosition();
-            router.delete(route('admin.destroy', ev.target.id), {
+            router.delete(route('admin.destroy', ev.target.dataset.id), {
                 method: 'delete',
             });
         }
@@ -35,10 +35,10 @@ export default function DeleteHallButton(props) {
                     <div className="dialog-header">Подтвердите</div>
                     <div className="dialog-content">
                         <div className="dialog-text">
-                            <p>Удалить кинозал "{name}"</p>
+                            <p>Удалить кинозал "{name}?"</p>
                             <p>
                                 При удалении также будут удалены: конфигурация
-                                зала, конфигурация цен зала и сеансы зала.{' '}
+                                зала, конфигурация цен зала и сеансы зала.
                             </p>
                         </div>
                     </div>
@@ -51,9 +51,9 @@ export default function DeleteHallButton(props) {
                             Отмена
                         </button>
                         <button
-                            id={id}
                             className="conf-step__button conf-step__button-accent"
                             type="button"
+                            data-id={id}
                             onClick={onCloseModal}
                         >
                             Удалить

@@ -28,6 +28,7 @@ Route::post('/admin/film', [FilmController::class, 'store'])->name('admin.storeF
 Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->name('admin.storeHallConf');
 Route::put('/admin/{id}', [HallController::class, 'update'])->name('admin.update');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
+Route::delete('/admin/film/{id}', [FilmController::class, 'destroy'])->name('admin.destroyFilm');
 Route::get('/clear', function() {
   Artisan::call('cache:clear');
   Artisan::call('config:cache');
