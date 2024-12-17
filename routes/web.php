@@ -26,7 +26,7 @@ Route::get('/admin', [SettingController::class, 'index'])->name('admin.index');
 Route::post('/admin', [HallController::class, 'store'])->name('admin.store');
 Route::post('/admin/film', [FilmController::class, 'store'])->name('admin.storeFilm');
 Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->name('admin.storeHallConf');
-Route::put('/admin/{id}', [HallController::class, 'update'])->name('admin.update');
+Route::put('/admin/film/{id}', [FilmController::class, 'update'])->name('admin.updateFilm');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
 Route::delete('/admin/film/{id}', [FilmController::class, 'destroy'])->name('admin.destroyFilm');
 Route::get('/clear', function() {

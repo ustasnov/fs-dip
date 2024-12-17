@@ -75,9 +75,9 @@ class FilmController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, Film $film)
+  public function update(Request $request, int $id)
   {
-    //
+    Log::channel('info')->info("request: $request" . PHP_EOL . "id = $id");
   }
 
   /**
