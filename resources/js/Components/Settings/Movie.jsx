@@ -1,22 +1,20 @@
 import { savePosition } from '@/utils';
-import { router } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
-//import DeleteFilmDialog from '../DeleteFilmDialog';
 import Modal from '../Modal';
 
-export default function Movie({ data }) {
+export default function Movie({ film }) {
     const [showDelete, setShowDelete] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
-    const [values, setValues] = useState({
-        name: data.name,
-        description: data.description,
-        year: data.year,
-        duration: data.duration,
-        poster: data.poster,
-    });
-    const posterUrl = `/storage/${data.poster}`;
+    const { data, setData, post, processing, errors } = useForm({
+        name: film.name,
+        description: film.description,
+        year: film.year,
+        duration: film.duration,
+        poster: film.poster,
+    })
 
-    //console.log(values.value);
+    const posterUrl = `/storage/${film.poster}`;
 
     function showDeleteModal(ev) {
         setShowDelete(true);
@@ -41,10 +39,6 @@ export default function Movie({ data }) {
 
     function onCloseUpdateModal(ev) {
         setShowUpdate(false);
-        if (ev.target.classList.contains('conf-step__button-accent')) {
-            savePosition();
-            put(route('admin.updateFilm', ev.target.dataset.id));
-        }
         ev.preventDefault();
     }
 
@@ -52,13 +46,12 @@ export default function Movie({ data }) {
         const key = e.target.dataset.id;
         const value = key === 'poster' ? e.target.files[0] : e.target.value;
 
-        setValues((values) => ({
-            ...values,
+        setData((data) => ({
+            ...data,
             [key]: value,
         }));
 
         if (key === 'poster') {
-            //console.log('Загружаем изображение');
             let reader = new FileReader();
             reader.onload = (e) =>
                 (document.querySelector('.poster-img').src = e.target.result);
@@ -81,13 +74,9 @@ export default function Movie({ data }) {
     function handleSubmit(ev) {
         savePosition();
         setShowUpdate(false);
-        const path = route('admin.updateFilm', ev.target.dataset.id);
-        console.log(path);
-        //router.put(path, {
-        //    method: 'put',
-        //});
-        e.preventDefault();
-        //closeErrorMessage();
+        ev.preventDefault();
+        post(route('admin.updateFilm', { id: ev.target.dataset.id, _method: 'PUT' }));
+        closeErrorMessage();
     }
 
     function closeAllOtherMenu(el) {
@@ -144,7 +133,7 @@ export default function Movie({ data }) {
         <>
             <div
                 className="conf-step__movie dropdown"
-                data-id={data.id}
+                data-id={film.id}
                 onClick={clickHandler}
             >
                 <img
@@ -152,9 +141,9 @@ export default function Movie({ data }) {
                     alt="poster"
                     src={posterUrl}
                 ></img>
-                <h3 className="conf-step__movie-title">{data.name}</h3>
+                <h3 className="conf-step__movie-title">{film.name}</h3>
                 <p className="conf-step__movie-duration">
-                    {data.duration} минут
+                    {film.duration} минут
                 </p>
 
                 <div className="dropdown-content">
@@ -174,7 +163,7 @@ export default function Movie({ data }) {
                     <div className="dialog-header">Подтвердите</div>
                     <div className="dialog-content">
                         <div className="dialog-text">
-                            <p>Удалить фильм "{data.name}?"</p>
+                            <p>Удалить фильм "{film.name}?"</p>
                             <p>
                                 Если имеются несохраненные изменения в сеансах,
                                 сначала сохраните их, а затем удаляйте фильм!
@@ -194,7 +183,7 @@ export default function Movie({ data }) {
                         <button
                             className="conf-step__button conf-step__button-accent"
                             type="button"
-                            data-id={data.id}
+                            data-id={film.id}
                             onClick={onCloseDeleteModal}
                         >
                             Удалить
@@ -203,7 +192,7 @@ export default function Movie({ data }) {
                 </div>
             </Modal>
             <Modal show={showUpdate}>
-                <form className="update-film-form" onSubmit={handleSubmit}>
+                <form className="update-film-form" data-id={film.id} onSubmit={handleSubmit}>
                     <div className="dialog-window">
                         <div className="dialog-header">Редактировать фильм</div>
                         <div className="dialog-content">
@@ -219,7 +208,7 @@ export default function Movie({ data }) {
                                     className="dialog-input"
                                     data-id="name"
                                     name="name"
-                                    value={values.name}
+                                    value={data.name}
                                     placeholder="Название фильма"
                                     onChange={handleChange}
                                 />
@@ -237,7 +226,7 @@ export default function Movie({ data }) {
                                     data-id="description"
                                     name="description"
                                     rows="5"
-                                    value={values.description}
+                                    value={data.description}
                                     placeholder="Краткое описание"
                                     onChange={handleChange}
                                 ></textarea>
@@ -255,7 +244,7 @@ export default function Movie({ data }) {
                                     className="dialog-input"
                                     data-id="year"
                                     name="year"
-                                    value={values.year}
+                                    value={data.year}
                                     placeholder="Год"
                                     onChange={handleChange}
                                 />
@@ -273,7 +262,7 @@ export default function Movie({ data }) {
                                     className="dialog-input"
                                     data-id="duration"
                                     name="duration"
-                                    value={values.duration}
+                                    value={data.duration}
                                     placeholder="Минут"
                                     onChange={handleChange}
                                 />
@@ -291,7 +280,7 @@ export default function Movie({ data }) {
                                     className="dialog-input"
                                     data-id="poster"
                                     name="poster"
-                                    value={values.value}
+                                    value={data.value}
                                     placeholder="Файл постера"
                                     onChange={handleChange}
                                 />
@@ -316,7 +305,7 @@ export default function Movie({ data }) {
                                 className="conf-step__button conf-step__button-accent"
                                 type="submit"
                             >
-                                Создать
+                                Сохранить
                             </button>
                         </div>
                     </div>

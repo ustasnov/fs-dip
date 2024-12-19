@@ -8,7 +8,7 @@ export default function MoviesList(props) {
             {data && (
                 <div className="conf-step__movies">
                     {data.map((val) => (
-                        <Movie key={val} data={val}></Movie>
+                        <Movie key={val} film={val}></Movie>
                     ))}
                 </div>
             )}
