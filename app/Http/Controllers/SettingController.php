@@ -34,12 +34,19 @@ class SettingController extends Controller
         ]);
     }
 
-    public function storeHallConf(Request $request) {
-        //Log::channel('info')->info($_REQUEST);
-        DB::table('halls')->upsert($request['hallData'],
-            ['id'], ['number_of_rows', 'chairs_in_row']);
-        DB::table('places')->upsert($request['places'],
-            ['hall_id', 'row', 'chair'], ['status', 'status']);
+    public function storeHallConf(Request $request)
+    {
+        Log::channel('info')->info($request);
+        DB::table('halls')->upsert(
+            $request['hallData'],
+            ['id'],
+            ['number_of_rows', 'chairs_in_row']
+        );
+        DB::table('places')->upsert(
+            $request['places'],
+            ['hall_id', 'row', 'chair'],
+            ['status', 'status']
+        );
         to_route('admin.index');
     }
 

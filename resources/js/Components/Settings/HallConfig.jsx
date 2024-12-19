@@ -2,9 +2,14 @@ import { savePosition } from '@/utils';
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import HallPlaces from './HallPlaces';
+import Modal from '../Modal';
 
 export default function HallConfig({ hallId, halls, places }) {
     const [prev_hallId, setHallId] = useState(hallId);
+    const [showChangesModal, setShowChangesModal] = useState(false);
+    //const [placesChanged, setPlacesChanged] = useState(false);
+    let placesChanged = false;
+
     let hallData = halls.find(function (hall) {
         return hall.id === parseInt(hallId);
     });
@@ -38,6 +43,7 @@ export default function HallConfig({ hallId, halls, places }) {
                             return val.row === ri && val.chair === ci;
                         });
                     }
+
                     pl_arr[r].push({
                         hall_id: hallData.id,
                         row: ri,
@@ -52,7 +58,26 @@ export default function HallConfig({ hallId, halls, places }) {
 
     places_arr = getPlacesArray();
 
+    function showChangesDialog() {
+        setShowChangesModal(true);
+        //ev.preventDefault();
+    }
+
     function handleChange(e) {
+        if (placesChanged) {
+            showChangesDialog();
+        }
+        else {
+            const key = e.target.id;
+            const value = e.target.value;
+            setValues((values) => ({
+                ...values,
+                [key]: value,
+            }));
+            places_arr = getPlacesArray();
+        }
+
+        /*
         const key = e.target.id;
         const value = e.target.value;
         setValues((values) => ({
@@ -60,6 +85,9 @@ export default function HallConfig({ hallId, halls, places }) {
             [key]: value,
         }));
         places_arr = getPlacesArray();
+        */
+
+        e.preventDefault();
     }
 
     if (hallId !== prev_hallId) {
@@ -72,6 +100,7 @@ export default function HallConfig({ hallId, halls, places }) {
     }
 
     function placeClickHandler(ev) {
+        console.log(places_arr);
         if (ev.target.classList.contains('conf-step__chair_disabled')) {
             ev.target.classList.remove('conf-step__chair_disabled');
             ev.target.classList.add('conf-step__chair_standart');
@@ -91,23 +120,29 @@ export default function HallConfig({ hallId, halls, places }) {
                 parseInt(ev.target.dataset.col)
             ].status = 'disabled';
         }
+        //console.log(places_arr);
+        //setPlacesChanged(true);
+        placesChanged = true;
         ev.preventDefault();
     }
 
     function handleSubmit(e) {
         const h = [{ id: hallId, ...values }];
         const pl = [];
+        console.log(places_arr);
         for (let r = 0; r < places_arr.length; r++) {
             const row = places_arr[r];
             for (let c = 0; c < row.length; c++) {
                 pl.push(row[c]);
             }
         }
+        //setPlacesChanged(false);
+        placesChanged = false;
         savePosition();
-
         router.post(
             route('admin.storeHallConf', [{ hallData: h, places: pl }]),
         );
+
         e.preventDefault();
     }
 
@@ -115,6 +150,11 @@ export default function HallConfig({ hallId, halls, places }) {
         e.preventDefault();
         savePosition();
         router.visit(route('admin.index'), { preserveScroll: true });
+    }
+
+    function onCloseChangesModal(ev) {
+        setShowChangesModal(false);
+        ev.preventDefault();
     }
 
     return (
@@ -193,6 +233,29 @@ export default function HallConfig({ hallId, halls, places }) {
                     ></input>
                 </fieldset>
             </form>
+            <Modal show={showChangesModal}>
+                <div className="dialog-window">
+                    <div className="dialog-header">Предупреждение</div>
+                    <div className="dialog-content">
+                        <div className="dialog-text">
+                            <p>Текущая схема кресел зала "{hallData.name} была изменена</p>
+                            <p>
+                                Сохраните или отмените изменения.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="dialog-footer">
+                        <button
+                            className="conf-step__button conf-step__button-accent"
+                            type="button"
+                            onClick={onCloseChangesModal}
+                        >
+                            Ок
+                        </button>
+                    </div>
+                </div>
+            </Modal>
+
         </>
     );
 }
