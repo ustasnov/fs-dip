@@ -4,12 +4,10 @@ import CreateHallButton from '@/Components/Settings/CreateHallButton';
 import HallConfig from '@/Components/Settings/HallConfig';
 import HallPricesConfig from '@/Components/Settings/HallPricesConf';
 import HallsList from '@/Components/Settings/HallsList';
-import HallsSelector from '@/Components/Settings/HallsSelector';
 import MoviesList from '@/Components/Settings/MoviesList';
 import Seances from '@/Components/Settings/Seances';
 import { restorePosition } from '@/utils';
-import { router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 
 export default function Settings(props) {
     const { halls, places, movies, seances } = props;
@@ -19,6 +17,7 @@ export default function Settings(props) {
     if (s_opened_str) {
         s_opened = JSON.parse(s_opened_str);
     }
+    /*
     const s_checked_str = localStorage.getItem('s_checked');
     const firstHallId = halls.length === 0 ? '0' : halls[0].id.toString();
     let s_checked = [firstHallId, firstHallId];
@@ -27,11 +26,14 @@ export default function Settings(props) {
     } else {
         localStorage.setItem('s_checked', JSON.stringify(s_checked));
     }
+    */
 
     restorePosition();
 
+    /*
     const [s0_checked, setChecked0] = useState(s_checked[0]);
     const [s1_checked, setChecked1] = useState(s_checked[1]);
+    */
 
     function getErrorMessage(error) {
         //console.log(`error: ${error}`);
@@ -64,7 +66,7 @@ export default function Settings(props) {
         //savePosition();
         router.visit(route('admin.index'), { preserveScroll: true });
     }
-    */
+    
 
     function onCheckHandler0(ev) {
         if (ev.target.checked) {
@@ -85,6 +87,7 @@ export default function Settings(props) {
             router.visit(route('admin.index'), { preserveScroll: true });
         }
     }
+    */
 
     return (
         <>
@@ -128,17 +131,7 @@ export default function Settings(props) {
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
                         </p>
-                        <HallsSelector
-                            sectionIndex="0"
-                            activeId={s0_checked}
-                            data={halls}
-                            onCheckHandler={onCheckHandler0}
-                        ></HallsSelector>
-                        <HallConfig
-                            hallId={s0_checked}
-                            halls={halls}
-                            places={places}
-                        ></HallConfig>
+                        <HallConfig halls={halls} places={places}></HallConfig>
                     </div>
                 </section>
 
@@ -152,16 +145,7 @@ export default function Settings(props) {
                         <p className="conf-step__paragraph">
                             Выберите зал для конфигурации:
                         </p>
-                        <HallsSelector
-                            sectionIndex="1"
-                            activeId={s1_checked}
-                            data={halls}
-                            onCheckHandler={onCheckHandler1}
-                        ></HallsSelector>
-                        <HallPricesConfig
-                            hallId={s1_checked}
-                            halls={halls}
-                        ></HallPricesConfig>
+                        <HallPricesConfig halls={halls}></HallPricesConfig>
                     </div>
                 </section>
 

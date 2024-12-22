@@ -9,7 +9,9 @@ export default function HallsSelector(props) {
         const inputElements = Array.from(
             document.querySelectorAll(`.conf-step__radio${sectionIndex}`),
         );
-        const searchEl = inputElements.find((el) => el.dataset.id === activeId);
+        const searchEl = inputElements.find(
+            (el) => el.dataset.id === `${activeId}`,
+        );
         if (searchEl) {
             searchEl.checked = true;
         }
@@ -27,7 +29,7 @@ export default function HallsSelector(props) {
                                 name={inputName}
                                 data-id={val.id}
                                 value={val.name}
-                                onChange={onCheckHandler}
+                                onClick={onCheckHandler}
                             ></input>
                             <span className="conf-step__selector">
                                 {val.name}

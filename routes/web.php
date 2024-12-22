@@ -24,6 +24,7 @@ Route::get('/admin', function () {
 */
 Route::get('/admin', [SettingController::class, 'index'])->name('admin.index');
 Route::post('/admin', [HallController::class, 'store'])->name('admin.store');
+Route::put('/admin/hall/{id}', [HallController::class, 'update'])->name('admin.update');
 Route::post('/admin/film', [FilmController::class, 'store'])->name('admin.storeFilm');
 Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->name('admin.storeHallConf');
 Route::put('/admin/film/{id}', [FilmController::class, 'update'])->name('admin.updateFilm');

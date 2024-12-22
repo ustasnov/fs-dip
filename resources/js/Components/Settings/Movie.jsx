@@ -12,13 +12,12 @@ export default function Movie({ film }) {
         year: film.year,
         duration: film.duration,
         poster: film.poster,
-    })
+    });
 
     const posterUrl = `/storage/${film.poster}`;
 
-    function showDeleteModal(ev) {
+    function showDeleteModal() {
         setShowDelete(true);
-        ev.preventDefault();
     }
 
     function onCloseDeleteModal(ev) {
@@ -32,9 +31,8 @@ export default function Movie({ film }) {
         ev.preventDefault();
     }
 
-    function showUpdateModal(ev) {
+    function showUpdateModal() {
         setShowUpdate(true);
-        ev.preventDefault();
     }
 
     function onCloseUpdateModal(ev) {
@@ -75,7 +73,12 @@ export default function Movie({ film }) {
         savePosition();
         setShowUpdate(false);
         ev.preventDefault();
-        post(route('admin.updateFilm', { id: ev.target.dataset.id, _method: 'PUT' }));
+        post(
+            route('admin.updateFilm', {
+                id: ev.target.dataset.id,
+                _method: 'PUT',
+            }),
+        );
         closeErrorMessage();
     }
 
@@ -119,7 +122,7 @@ export default function Movie({ film }) {
         closeMenu(ev);
         ev.preventDefault();
         ev.stopPropagation();
-        showUpdateModal(ev);
+        showUpdateModal();
     }
 
     function deleteHandler(ev) {
@@ -192,7 +195,11 @@ export default function Movie({ film }) {
                 </div>
             </Modal>
             <Modal show={showUpdate}>
-                <form className="update-film-form" data-id={film.id} onSubmit={handleSubmit}>
+                <form
+                    className="update-film-form"
+                    data-id={film.id}
+                    onSubmit={handleSubmit}
+                >
                     <div className="dialog-window">
                         <div className="dialog-header">Редактировать фильм</div>
                         <div className="dialog-content">
