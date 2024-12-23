@@ -3,7 +3,8 @@ import { router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import Modal from '../Modal';
 
-export default function Movie({ film }) {
+export default function Movie({ film, halls }) {
+    const [showCreate, setCreateSeance] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
@@ -15,6 +16,39 @@ export default function Movie({ film }) {
     });
 
     const posterUrl = `/storage/${film.poster}`;
+
+    function showCreateModal() {
+        setCreateSeance(true);
+    }
+
+    function onCloseCreateModal(ev) {
+        setCreateSeance(false);
+        ev.preventDefault();
+    }
+
+    function handleSubmitCreate(ev) {
+        ev.preventDefault();
+        const form = document.forms.createSeanceForm;
+        const hall = halls.find((el) => el.name === form.hall.value);
+        const start =
+            parseInt(form.starthours.value) * 60 +
+            parseInt(form.startminutes.value);
+        const end = start + film.duration;
+        setCreateSeance(false);
+        console.log(
+            `film_id=${film.id}, hall_id=${hall.id}, start=${start}, end=${end}`,
+        );
+        savePosition();
+        router.post(
+            route('admin.storeSeance', {
+                film_id: film.id,
+                hall_id: hall.id,
+                start: start,
+                end: end,
+            }),
+        );
+        closeErrorMessage();
+    }
 
     function showDeleteModal() {
         setShowDelete(true);
@@ -116,6 +150,7 @@ export default function Movie({ film }) {
         closeMenu(ev);
         ev.preventDefault();
         ev.stopPropagation();
+        showCreateModal();
     }
 
     function editHandler(ev) {
@@ -305,6 +340,90 @@ export default function Movie({ film }) {
                                 className="conf-step__button conf-step__button-regular"
                                 type="button"
                                 onClick={onCloseUpdateModal}
+                            >
+                                Отмена
+                            </button>
+                            <button
+                                className="conf-step__button conf-step__button-accent"
+                                type="submit"
+                            >
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </Modal>
+            <Modal show={showCreate}>
+                <form
+                    className="create-seance-form"
+                    name="createSeanceForm"
+                    onSubmit={handleSubmitCreate}
+                >
+                    <div className="dialog-window">
+                        <div className="dialog-header">Новый сеанс</div>
+                        <div className="dialog-content">
+                            <div className="dialog-field">
+                                <label
+                                    htmlFor="hall-name"
+                                    className="dialog-label"
+                                >
+                                    Зал:
+                                </label>
+                                <select
+                                    id="hall-name"
+                                    name="hall"
+                                    className="dialog-input"
+                                >
+                                    {halls && (
+                                        <>
+                                            {halls.map((val) => (
+                                                <option
+                                                    key={val}
+                                                    value={val.name}
+                                                >
+                                                    {val.name}
+                                                </option>
+                                            ))}
+                                        </>
+                                    )}
+                                </select>
+                            </div>
+                            <div className="dialog-field-inline">
+                                <label
+                                    htmlFor="seance-start-hours"
+                                    className="dialog-label"
+                                >
+                                    Начало сеанса:
+                                </label>
+                                <input
+                                    type="number"
+                                    id="seance-start-hours"
+                                    className="dialog-input"
+                                    data-id="hours"
+                                    name="starthours"
+                                    placeholder="Часов"
+                                />
+                            </div>
+                            <div className="dialog-field-inline">
+                                <label
+                                    htmlFor="seance-start-minutes"
+                                    className="dialog-label"
+                                ></label>
+                                <input
+                                    type="number"
+                                    id="seance-start-minutes"
+                                    className="dialog-input"
+                                    data-id="minutes"
+                                    name="startminutes"
+                                    placeholder="Минут"
+                                />
+                            </div>
+                        </div>
+                        <div className="dialog-footer">
+                            <button
+                                className="conf-step__button conf-step__button-regular"
+                                type="button"
+                                onClick={onCloseCreateModal}
                             >
                                 Отмена
                             </button>

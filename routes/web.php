@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HallController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SeanceController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,7 @@ Route::post('/admin/hallconf', [SettingController::class, 'storeHallConf'])->nam
 Route::put('/admin/film/{id}', [FilmController::class, 'update'])->name('admin.updateFilm');
 Route::delete('/admin/{id}', [HallController::class, 'destroy'])->name('admin.destroy');
 Route::delete('/admin/film/{id}', [FilmController::class, 'destroy'])->name('admin.destroyFilm');
+Route::post('/admin/seance', [SeanceController::class, 'store'])->name('admin.storeSeance');
 Route::get('/clear', function() {
   Artisan::call('cache:clear');
   Artisan::call('config:cache');

@@ -863,6 +863,13 @@ textarea.conf-step__input {
     resize: none;
 }
 
+.dialog-select {
+  padding: 10px;
+  font-size: 1.6rem;
+  color: #000000;
+  background-color: white;
+}
+
 .dialog-field {
     display: flex;
     flex-direction: column;

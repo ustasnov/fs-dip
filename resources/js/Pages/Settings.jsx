@@ -182,7 +182,7 @@ export default function Settings(props) {
                             </div>
                         </p>
 
-                        <MoviesList data={movies}></MoviesList>
+                        <MoviesList data={movies} halls={halls}></MoviesList>
                         <Seances halls={halls} seances={seances}></Seances>
                     </div>
                 </section>
