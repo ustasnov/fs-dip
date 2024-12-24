@@ -629,8 +629,8 @@ select {
 
 .conf-step__seances-movie .conf-step__seances-movie-start {
     position: absolute;
-    bottom: -33px;
-    left: -14px;
+    bottom: -40px;
+    left: -12px;
     color: #848484;
     font-size: 1.2rem;
 }
